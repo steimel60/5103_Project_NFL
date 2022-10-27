@@ -1,0 +1,37 @@
+---
+title: "Untitled"
+author: "Dylan Steimel and Constantine Kutson"
+date: "2022-10-27"
+output: word_document
+---
+
+```{r load_data}
+data_2022 = read.csv(file = 'pbp-2022.csv')
+data_2021 = read.csv(file = 'pbp-2021.csv')
+data_2020 = read.csv(file = 'pbp-2020.csv')
+data_2019 = read.csv(file = 'pbp-2019.csv')
+data_2018 = read.csv(file = 'pbp-2018.csv')
+data_2017 = read.csv(file = 'pbp-2017.csv')
+data_2016 = read.csv(file = 'pbp-2016.csv')
+data_2015 = read.csv(file = 'pbp-2015.csv')
+data_2014 = read.csv(file = 'pbp-2014.csv')
+data_2013 = read.csv(file = 'pbp-2013.csv')
+```
+
+
+```{r examine_data}
+
+```
+
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

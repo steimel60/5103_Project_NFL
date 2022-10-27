@@ -1,0 +1,4 @@
+"0","table(data_2022)
+"
+"2","Error in table(data_2022) : attempt to make a table with >= 2^31 elements
+"
