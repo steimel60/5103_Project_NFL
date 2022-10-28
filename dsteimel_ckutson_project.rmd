@@ -1,8 +1,8 @@
 ---
-title: "Untitled"
+title: "DSA5103 Final Project"
 author: "Dylan Steimel and Constantine Kutson"
-date: "2022-10-27"
-output: word_document
+date: "10/27/2022"
+output: pdf_document
 ---
 
 ```{r load_data}
@@ -18,20 +18,4 @@ data_2014 = read.csv(file = 'pbp-2014.csv')
 data_2013 = read.csv(file = 'pbp-2013.csv')
 ```
 
-
-```{r examine_data}
-
-```
-
-
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Test
