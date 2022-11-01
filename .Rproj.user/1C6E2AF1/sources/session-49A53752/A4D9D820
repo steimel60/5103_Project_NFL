@@ -1,0 +1,28 @@
+{
+    "id": "A4D9D820",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1667260260798.0,
+    "source_on_save": false,
+    "relative_order": 9,
+    "properties": {
+        "id": "11752ac511c2498daf6a1fb07f49ef6f",
+        "name": "teams",
+        "title": "teams",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 8314540345721713184,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1667260260798,
+    "read_only": false,
+    "read_only_alternatives": []
+}
