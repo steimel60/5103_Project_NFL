@@ -1,9 +1,15 @@
 ---
-title: "Untitled"
+title: "DSA5103 Final Project"
 author: "Dylan Steimel and Constantine Kutson"
-date: "2022-10-27"
-output: word_document
+date: "10/27/2022"
+output: pdf_document
 ---
+
+```{r load_libs}
+library(dplyr)
+#install.packages("hash")
+library(hash)
+```
 
 ```{r load_data}
 data_2022 = read.csv(file = 'pbp-2022.csv')
@@ -18,26 +24,62 @@ data_2014 = read.csv(file = 'pbp-2014.csv')
 data_2013 = read.csv(file = 'pbp-2013.csv')
 ```
 
+```{r team_data}
+team_names = unique(data_2021$OffenseTeam)
+team_names = team_names[team_names != ""]
 
-```{r examine_data}
-#summary(data_2021) #View most recent complete season
-sum(data_2021$IsPass==1)
-sum(data_2021$IsRush==1)
-rush_2021 = subset(data_2021,IsRush==1)
-pass_2021 = subset(data_2021, IsPass==1)
-summary(rush_2021)
-summary(pass_2021)
+teams = hash()
+
+for (t in team_names) {
+  teams[[t]] = hash()
+  #Get dataset for each team, also for this project we are only interested in Rush or Pass
+  #We also drop features that are play results not game states
+      ## i.e. We don't want our model realizing "RushDirection" == "" means pass!
+  game_state_features = c("Quarter", "Minute", "Second", "OffenseTeam","DefenseTeam" ,"Down", "ToGo", "YardLine", "SeriesFirstDown", "SeasonYear", "Formation")
+  targets = c("IsPass", "IsRush")
+  misc = c("GameId","IsTouchdown") #Need to calculate score for features
+  team_df = subset(data_2021, (OffenseTeam == t | DefenseTeam == t) & 
+                     (IsRush == 1 | IsPass ==1),
+                   select = c(game_state_features, targets, misc))
+  #For Each team put games and plays in chronological order
+  team_df = team_df[with(team_df, order(GameId, Quarter, desc(Minute), desc(Second), Down)), ]
+  #Split team into games
+  i = 1
+  for (g in unique(team_df$GameId)){
+    week = sprintf("Week %s", i)
+    print(week)
+    teams[[t]][[week]] = subset(team_df, GameId == g)
+    print("Subhash set")
+    i = i + 1
+  }
+}
+
+#Example accessing data with hash NOTE: use double brackets
+teams[["ARI"]][["Week 1"]]
 ```
 
+```{r visualize_data}
+pass_2021 = subset(data_2021, IsPass == 1)
+rush_2021 = subset(data_2021, IsRush == 1)
+pt = table(pass_2021$Quarter)
+rt = table(rush_2021$Quarter)
+#Get breakdown by quarter
+Q1_table = c(pt["1"], rt["1"])
+Q2_table = c(pt["2"], rt["2"])
+Q3_table = c(pt["3"], rt["3"])
+Q4_table = c(pt["4"], rt["4"])
+#Get total plays
+q1_plays = sum(Q1_table)
+q2_plays = sum(Q2_table)
+q3_plays = sum(Q3_table)
+q4_plays = sum(Q4_table)
+#Get percent pass/rush by quarter
+Q1 = Q1_table / q1_plays
+Q2 = Q2_table / q2_plays
+Q3 = Q3_table / q3_plays
+Q4 = Q4_table / q4_plays
 
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+bars = cbind(Q1, Q2, Q3, Q4)
+barplot(bars, beside=TRUE, col=c("blue","green"))
+legend("bottomright",c("Pass %","Rush %"),fill = c("blue","green"))
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
