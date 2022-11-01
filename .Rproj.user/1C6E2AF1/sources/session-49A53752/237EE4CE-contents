@@ -47,9 +47,7 @@ for (t in team_names) {
   i = 1
   for (g in unique(team_df$GameId)){
     week = sprintf("Week %s", i)
-    print(week)
     teams[[t]][[week]] = subset(team_df, GameId == g)
-    print("Subhash set")
     i = i + 1
   }
 }
