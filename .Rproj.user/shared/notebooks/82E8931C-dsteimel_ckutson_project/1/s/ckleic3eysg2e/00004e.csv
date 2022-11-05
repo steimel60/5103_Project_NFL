@@ -1,0 +1,94 @@
+"0","pass_2021 = subset(data_2021, IsPass == 1)
+rush_2021 = subset(data_2021, IsRush == 1)
+pt = table(pass_2021$Quarter)
+rt = table(rush_2021$Quarter)
+#Get breakdown by quarter
+Q1_table = c(pt[""1""], rt[""1""])
+Q2_table = c(pt[""2""], rt[""2""])
+Q3_table = c(pt[""3""], rt[""3""])
+Q4_table = c(pt[""4""], rt[""4""])
+#Get total plays
+q1_plays = sum(Q1_table)
+q2_plays = sum(Q2_table)
+q3_plays = sum(Q3_table)
+q4_plays = sum(Q4_table)
+#Get percent pass/rush by quarter
+Q1 = Q1_table / q1_plays
+Q2 = Q2_table / q2_plays
+Q3 = Q3_table / q3_plays
+Q4 = Q4_table / q4_plays
+
+bars = cbind(Q1, Q2, Q3, Q4)
+barplot(bars)
+legend(""bottomright"",c(""Pass %"",""Rush %""),fill = c(""blue"",""green""))
+
+
+
+#How does score effect ratio
+runs_win_1 = 0
+runs_win_2 = 0
+runs_win_3 = 0
+runs_win_4 = 0
+runs_tie_1 = 0
+runs_tie_2 = 0
+runs_tie_3 = 0
+runs_tie_4 = 0
+runs_lose_1 = 0
+runs_lose_2 = 0
+runs_lose_3 = 0
+runs_lose_4 = 0
+pass_win_1 = 0
+pass_win_2 = 0
+pass_win_3 = 0
+pass_win_4 = 0
+pass_tie_1 = 0
+pass_tie_2 = 0
+pass_tie_3 = 0
+pass_tie_4 = 0
+pass_lose_1 = 0
+pass_lose_2 = 0
+pass_lose_3 = 0
+pass_lose_4 = 0
+for (t in keys(teams)){
+  for (game in keys(teams[[t]])){
+    #Get runs by situation
+    runs_win_1 = runs_win_1 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 1)$IsRush)
+    runs_win_2 = runs_win_2 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 2)$IsRush)
+    runs_win_3 = runs_win_3 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 3)$IsRush)
+    runs_win_4 = runs_win_4 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 4)$IsRush)
+    
+    runs_tie_1 = runs_tie_1 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 1)$IsRush)
+    runs_tie_2 = runs_tie_2 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 2)$IsRush)
+    runs_tie_3 = runs_tie_3 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 3)$IsRush)
+    runs_tie_4 = runs_tie_4 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 4)$IsRush)
+    
+    runs_lose_1 = runs_lose_1 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 1)$IsRush)
+    runs_lose_2 = runs_lose_2 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 2)$IsRush)
+    runs_lose_3 = runs_lose_3 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 3)$IsRush)
+    runs_lose_4 = runs_lose_4 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 4)$IsRush)
+    #Get pass by situation
+    pass_win_1 = pass_win_1 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 1)$IsPass)
+    pass_win_2 = pass_win_2 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 2)$IsPass)
+    pass_win_3 = pass_win_3 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 3)$IsPass)
+    pass_win_4 = pass_win_4 + sum(subset(teams[[t]][[game]], ScoreDiff > 0 & Quarter == 4)$IsPass)
+    
+    pass_tie_1 = pass_tie_1 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 1)$IsPass)
+    pass_tie_2 = pass_tie_2 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 2)$IsPass)
+    pass_tie_3 = pass_tie_3 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 3)$IsPass)
+    pass_tie_4 = pass_tie_4 + sum(subset(teams[[t]][[game]], ScoreDiff == 0 & Quarter == 4)$IsPass)
+    
+    pass_lose_1 = pass_lose_1 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 1)$IsPass)
+    pass_lose_2 = pass_lose_2 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 2)$IsPass)
+    pass_lose_3 = pass_lose_3 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 3)$IsPass)
+    pass_lose_4 = pass_lose_4 + sum(subset(teams[[t]][[game]], ScoreDiff < 0 & Quarter == 4)$IsPass)
+  }
+}
+q1_ratio = c(pass_win_1/runs_win_1, pass_tie_1/runs_tie_1, pass_lose_1/runs_lose_1)
+q2_ratio = c(pass_win_2/runs_win_2, pass_tie_2/runs_tie_2, pass_lose_2/runs_lose_2)
+q3_ratio = c(pass_win_3/runs_win_3, pass_tie_3/runs_tie_3, pass_lose_3/runs_lose_3)
+q4_ratio = c(pass_win_4/runs_win_4, pass_tie_4/runs_tie_4, pass_lose_4/runs_lose_4)
+
+wtl = cbind(q1_ratio, q2_ratio, q3_ratio, q4_ratio)
+barplot(wtl, beside = TRUE, col =c(""green"",""grey"",""red""))
+"
+"0","legend(""bottomright"",c(""Winning"",""Tied"",""Losing""),fill = c(""green"",""grey"",""red""))"
